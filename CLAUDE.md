@@ -6,11 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 本项目是一个 Claude Plugin 项目，主要以 **提示词工程** 为主，**CLI 为辅**。
 
+- **[开发规范文档](./.otcc/standard/index.md)**: 根据需要去查看具体文件
+- 开发的时候需要去查询当前有哪些角色, 尽量使用最适合的角色进行开发, 角色目录在 ./claude/roles
+
 ## Skill 规则
 
 - **写提示词（Prompt）时**：必须调用 `prompt-engineering-patterns` skill，遵循其中的最佳实践
 - **写代码时, 架构设计时**：必须遵循 `design-patterns-principles` skill 的设计模式和原则
-- **写cli**: 必须使用 `oclif-patterns` skill, 必须参考 `./docs/cli-development-spec.md` 规范
+- **写cli**: 必须使用 `oclif-patterns` skill
 
 ## Project Status
 
@@ -29,9 +32,9 @@ otcc/
 
 ## Commands
 
-| 命令 | 说明 |
-|------|------|
-| `bun run dev` | 开发模式运行 |
-| `bun run build` | 构建到 bin/ |
+| 命令                | 说明                |
+| ------------------- | ------------------- |
+| `bun run dev`       | 开发模式运行        |
+| `bun run build`     | 构建到 bin/         |
 | `bun run typecheck` | TypeScript 类型检查 |
-| `npx .` | 直接运行当前项目 |
+| `npx .`             | 直接运行当前项目    |

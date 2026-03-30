@@ -72,22 +72,20 @@ src/
 
 ```ts
 export default class XxxCommand extends Command {
-  static description = '命令描述'
+  static description = "命令描述";
 
-  static examples = [
-    '$ otcc topic action',
-  ]
+  static examples = ["$ otcc topic action"];
 
   static flags = {
-    verbose: Flags.boolean({ char: 'v', description: '显示详细信息' }),
-  }
+    verbose: Flags.boolean({ char: "v", description: "显示详细信息" }),
+  };
 
   static args = {
-    name: Args.string({ required: true, description: '名称' }),
-  }
+    name: Args.string({ required: true, description: "名称" }),
+  };
 
   async run(): Promise<void> {
-    const { flags, args } = await this.parse(XxxCommand)
+    const { flags, args } = await this.parse(XxxCommand);
     // 执行逻辑
   }
 }
@@ -304,33 +302,31 @@ CLI 层不要直接承载复杂领域逻辑。
 新增命令时，可直接参考下面骨架：
 
 ```ts
-import { Command, Flags, Args } from '@oclif/core'
-import { someDomainAction } from '../../core/<topic>/xxx'
+import { Command, Flags, Args } from "@oclif/core";
+import { someDomainAction } from "../../core/<topic>/xxx";
 
 export default class TopicAction extends Command {
-  static description = '命令说明'
+  static description = "命令说明";
 
-  static examples = [
-    '$ otcc <topic> <action>',
-  ]
+  static examples = ["$ otcc <topic> <action>"];
 
   static flags = {
-    example: Flags.string({ char: 'e', description: '示例参数' }),
-  }
+    example: Flags.string({ char: "e", description: "示例参数" }),
+  };
 
   static args = {
-    name: Args.string({ required: true, description: '资源名称' }),
-  }
+    name: Args.string({ required: true, description: "资源名称" }),
+  };
 
   async run(): Promise<void> {
-    const { flags, args } = await this.parse(TopicAction)
+    const { flags, args } = await this.parse(TopicAction);
 
     const result = await someDomainAction({
       name: args.name,
       example: flags.example,
-    })
+    });
 
-    this.log(result)
+    this.log(result);
   }
 }
 ```
