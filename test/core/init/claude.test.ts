@@ -1,6 +1,12 @@
+import { basename } from 'node:path'
 import { describe, expect, it } from 'bun:test'
 
-import { applyOtccRoleBlock, buildOtccRoleBlock } from '../../../src/core/init/claude'
+import {
+  applyOtccRoleBlock,
+  buildOtccRoleBlock,
+  readRolePriorityTemplate,
+  resolveTemplatePath,
+} from '../../../src/core/init/claude'
 
 describe('core/init/claude', () => {
   describe('buildOtccRoleBlock', () => {
@@ -56,6 +62,32 @@ describe('core/init/claude', () => {
       const broken = '<otcc-role>\n损坏 block\n\n已有普通内容\n'
 
       expect(() => applyOtccRoleBlock(broken, block)).toThrow('检测到损坏的 <otcc-role> block')
+    })
+
+    it('throws when end tag exists but start tag is missing', () => {
+      const block = '<otcc-role>\nnew role\n</otcc-role>'
+      const broken = '损坏 block\n</otcc-role>\n\n已有普通内容\n'
+
+      expect(() => applyOtccRoleBlock(broken, block)).toThrow('检测到损坏的 <otcc-role> block')
+    })
+
+    it('throws when start/end tags both exist but order is invalid', () => {
+      const block = '<otcc-role>\nnew role\n</otcc-role>'
+      const broken = '</otcc-role>\n损坏 block\n<otcc-role>\n\n已有普通内容\n'
+
+      expect(() => applyOtccRoleBlock(broken, block)).toThrow('检测到损坏的 <otcc-role> block')
+    })
+  })
+
+  describe('template resolving', () => {
+    it("basename(resolveTemplatePath()) === 'role-priority-prompt.md'", () => {
+      expect(basename(resolveTemplatePath())).toBe('role-priority-prompt.md')
+    })
+
+    it("readRolePriorityTemplate() contains '# 角色优先提示词'", async () => {
+      const content = await readRolePriorityTemplate()
+
+      expect(content).toContain('# 角色优先提示词')
     })
   })
 })
