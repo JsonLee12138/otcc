@@ -48,6 +48,7 @@ describe('otcc init command', () => {
     const result = runInit(workspace)
 
     expect(result.exitCode).toBe(0)
+    expect(result.stdout).toContain('已创建 CLAUDE.md')
     expect(existsSync(target)).toBe(true)
 
     const content = readFileSync(target, 'utf8')
@@ -64,6 +65,7 @@ describe('otcc init command', () => {
     const result = runInit(workspace)
 
     expect(result.exitCode).toBe(0)
+    expect(result.stdout).toContain('已在 CLAUDE.md 顶部插入 <otcc-role>')
 
     const content = readFileSync(target, 'utf8')
     expect(content.startsWith('<otcc-role>\n')).toBe(true)
@@ -83,6 +85,7 @@ describe('otcc init command', () => {
     const result = runInit(workspace)
 
     expect(result.exitCode).toBe(0)
+    expect(result.stdout).toContain('已更新现有 <otcc-role>')
 
     const content = readFileSync(target, 'utf8')
     expect(content).not.toContain('old role block')
