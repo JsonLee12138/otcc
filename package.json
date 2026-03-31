@@ -18,9 +18,7 @@
     }
   },
   "files": [
-    "bin/",
     "dist/",
-    "src/",
     "templates/"
   ],
   "scripts": {
