@@ -20,7 +20,8 @@
   "files": [
     "bin/",
     "dist/",
-    "src/"
+    "src/",
+    "templates/"
   ],
   "scripts": {
     "build": "tsdown",
@@ -28,7 +29,8 @@
     "dev": "bun run src/index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "bun test"
   },
   "config": {
     "commitizen": {
