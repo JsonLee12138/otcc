@@ -5,7 +5,7 @@ export default defineConfig({
   outDir: 'dist',
   unbundle: true,
   format: ['esm'],
-  dts: true,
+  dts: false,
   clean: true,
   shims: true,
   platform: 'node',
