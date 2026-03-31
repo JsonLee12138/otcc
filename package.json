@@ -24,7 +24,7 @@
     "templates/"
   ],
   "scripts": {
-    "build": "tsdown",
+    "build": "tsdown && cp -r templates dist/",
     "typecheck": "tsc --noEmit",
     "dev": "bun run src/index.ts",
     "lint": "eslint .",
