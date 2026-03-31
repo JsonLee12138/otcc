@@ -10,16 +10,18 @@ import {
 
 describe('core/init/claude', () => {
   describe('buildOtccRoleBlock', () => {
-    it('uses <otcc-role> to wrap template content', () => {
+    it('uses <!-- otcc:role --> to wrap template content', () => {
       const template = '你是 OTCC init 测试角色。\n请遵循规则输出。'
 
-      expect(buildOtccRoleBlock(template)).toBe(`<otcc-role>\n${template}\n</otcc-role>`)
+      expect(buildOtccRoleBlock(template)).toBe(
+        `<!-- otcc:role -->\n${template}\n<!-- otcc:role-end -->`,
+      )
     })
   })
 
   describe('applyOtccRoleBlock', () => {
-    it("returns { action: 'created', content: block + '\\n' } when original content is null", () => {
-      const block = '<otcc-role>\nnew role\n</otcc-role>'
+    it('returns { action: \'created\', content: block + \'\\n\' } when original content is null', () => {
+      const block = '<!-- otcc:role -->\nnew role\n<!-- otcc:role-end -->'
 
       expect(applyOtccRoleBlock(null, block)).toEqual({
         action: 'created',
@@ -27,8 +29,8 @@ describe('core/init/claude', () => {
       })
     })
 
-    it("inserts block to top and returns 'inserted' when file has normal content", () => {
-      const block = '<otcc-role>\nnew role\n</otcc-role>'
+    it('inserts block to top and returns \'inserted\' when file has normal content', () => {
+      const block = '<!-- otcc:role -->\nnew role\n<!-- otcc:role-end -->'
       const existing = '已有普通内容\n第二行内容\n'
 
       expect(applyOtccRoleBlock(existing, block)).toEqual({
@@ -37,9 +39,10 @@ describe('core/init/claude', () => {
       })
     })
 
-    it("replaces existing <otcc-role> block and returns 'updated'", () => {
-      const block = '<otcc-role>\nnew role\n</otcc-role>'
-      const existing = '<otcc-role>\nold role\n</otcc-role>\n\n已有普通内容\n'
+    it('replaces existing <!-- otcc:role --> block and returns \'updated\'', () => {
+      const block = '<!-- otcc:role -->\nnew role\n<!-- otcc:role-end -->'
+      const existing
+        = '<!-- otcc:role -->\nold role\n<!-- otcc:role-end -->\n\n已有普通内容\n'
 
       expect(applyOtccRoleBlock(existing, block)).toEqual({
         action: 'updated',
@@ -47,8 +50,8 @@ describe('core/init/claude', () => {
       })
     })
 
-    it("still returns 'updated' and keeps content unchanged when block is identical", () => {
-      const block = '<otcc-role>\nnew role\n</otcc-role>'
+    it('still returns \'updated\' and keeps content unchanged when block is identical', () => {
+      const block = '<!-- otcc:role -->\nnew role\n<!-- otcc:role-end -->'
       const existing = `${block}\n\n已有普通内容\n`
 
       expect(applyOtccRoleBlock(existing, block)).toEqual({
@@ -58,33 +61,40 @@ describe('core/init/claude', () => {
     })
 
     it('throws when start tag exists but end tag is missing', () => {
-      const block = '<otcc-role>\nnew role\n</otcc-role>'
-      const broken = '<otcc-role>\n损坏 block\n\n已有普通内容\n'
+      const block = '<!-- otcc:role -->\nnew role\n<!-- otcc:role-end -->'
+      const broken = '<!-- otcc:role -->\n损坏 block\n\n已有普通内容\n'
 
-      expect(() => applyOtccRoleBlock(broken, block)).toThrow('检测到损坏的 <otcc-role> block')
+      expect(() => applyOtccRoleBlock(broken, block)).toThrow(
+        '检测到损坏的 <!-- otcc:role --> block',
+      )
     })
 
     it('throws when end tag exists but start tag is missing', () => {
-      const block = '<otcc-role>\nnew role\n</otcc-role>'
-      const broken = '损坏 block\n</otcc-role>\n\n已有普通内容\n'
+      const block = '<!-- otcc:role -->\nnew role\n<!-- otcc:role-end -->'
+      const broken = '损坏 block\n<!-- otcc:role-end -->\n\n已有普通内容\n'
 
-      expect(() => applyOtccRoleBlock(broken, block)).toThrow('检测到损坏的 <otcc-role> block')
+      expect(() => applyOtccRoleBlock(broken, block)).toThrow(
+        '检测到损坏的 <!-- otcc:role --> block',
+      )
     })
 
     it('throws when start/end tags both exist but order is invalid', () => {
-      const block = '<otcc-role>\nnew role\n</otcc-role>'
-      const broken = '</otcc-role>\n损坏 block\n<otcc-role>\n\n已有普通内容\n'
+      const block = '<!-- otcc:role -->\nnew role\n<!-- otcc:role-end -->'
+      const broken
+        = '<!-- otcc:role-end -->\n损坏 block\n<!-- otcc:role -->\n\n已有普通内容\n'
 
-      expect(() => applyOtccRoleBlock(broken, block)).toThrow('检测到损坏的 <otcc-role> block')
+      expect(() => applyOtccRoleBlock(broken, block)).toThrow(
+        '检测到损坏的 <!-- otcc:role --> block',
+      )
     })
   })
 
   describe('template resolving', () => {
-    it("basename(resolveTemplatePath()) === 'role-priority-prompt.md'", () => {
+    it('basename(resolveTemplatePath()) === \'role-priority-prompt.md\'', () => {
       expect(basename(resolveTemplatePath())).toBe('role-priority-prompt.md')
     })
 
-    it("readRolePriorityTemplate() contains '# 角色优先提示词'", async () => {
+    it('readRolePriorityTemplate() contains \'# 角色优先提示词\'', async () => {
       const content = await readRolePriorityTemplate()
 
       expect(content).toContain('# 角色优先提示词')

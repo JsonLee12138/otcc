@@ -1,4 +1,10 @@
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import {
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { afterEach, describe, expect, it } from 'bun:test'
@@ -52,8 +58,8 @@ describe('otcc init command', () => {
     expect(existsSync(target)).toBe(true)
 
     const content = readFileSync(target, 'utf8')
-    expect(content).toContain('<otcc-role>')
-    expect(content).toContain('</otcc-role>')
+    expect(content).toContain('<!-- otcc:role -->')
+    expect(content).toContain('<!-- otcc:role-end -->')
   })
 
   it('inserts block at top when CLAUDE.md already exists', () => {
@@ -65,11 +71,13 @@ describe('otcc init command', () => {
     const result = runInit(workspace)
 
     expect(result.exitCode).toBe(0)
-    expect(result.stdout).toContain('已在 CLAUDE.md 顶部插入 <otcc-role>')
+    expect(result.stdout).toContain(
+      '已在 CLAUDE.md 顶部插入 <!-- otcc:role -->',
+    )
 
     const content = readFileSync(target, 'utf8')
-    expect(content.startsWith('<otcc-role>\n')).toBe(true)
-    expect(content).toContain('</otcc-role>\n\n')
+    expect(content.startsWith('<!-- otcc:role -->\n')).toBe(true)
+    expect(content).toContain('<!-- otcc:role-end -->\n\n')
     expect(content.endsWith(existing)).toBe(true)
   })
 
@@ -78,30 +86,36 @@ describe('otcc init command', () => {
     const target = join(workspace, 'CLAUDE.md')
     writeFileSync(
       target,
-      '<otcc-role>\nold role block\n</otcc-role>\n\nnormal content\n',
+      '<!-- otcc:role -->\nold role block\n<!-- otcc:role-end -->\n\nnormal content\n',
       'utf8',
     )
 
     const result = runInit(workspace)
 
     expect(result.exitCode).toBe(0)
-    expect(result.stdout).toContain('已更新现有 <otcc-role>')
+    expect(result.stdout).toContain('已更新现有 <!-- otcc:role -->')
 
     const content = readFileSync(target, 'utf8')
     expect(content).not.toContain('old role block')
     expect(content).toContain('normal content\n')
-    expect(countOccurrences(content, '<otcc-role>')).toBe(1)
-    expect(countOccurrences(content, '</otcc-role>')).toBe(1)
+    expect(countOccurrences(content, '<!-- otcc:role -->')).toBe(1)
+    expect(countOccurrences(content, '<!-- otcc:role-end -->')).toBe(1)
   })
 
   it('fails on broken otcc-role block', () => {
     const workspace = createWorkspace()
     const target = join(workspace, 'CLAUDE.md')
-    writeFileSync(target, '<otcc-role>\nbroken block\n\nnormal content\n', 'utf8')
+    writeFileSync(
+      target,
+      '<!-- otcc:role -->\nbroken block\n\nnormal content\n',
+      'utf8',
+    )
 
     const result = runInit(workspace)
 
     expect(result.exitCode).not.toBe(0)
-    expect(`${result.stdout}\n${result.stderr}`).toContain('检测到损坏的 <otcc-role> block')
+    expect(`${result.stdout}\n${result.stderr}`).toContain(
+      '检测到损坏的 <!-- otcc:role --> block',
+    )
   })
 })

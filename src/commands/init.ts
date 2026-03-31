@@ -15,10 +15,10 @@ export default class Init extends Command {
     }
 
     if (result.action === 'inserted') {
-      this.log('✅ 已在 CLAUDE.md 顶部插入 <otcc-role>')
+      this.log('✅ 已在 CLAUDE.md 顶部插入 <!-- otcc:role -->')
       return
     }
 
-    this.log('✅ 已更新现有 <otcc-role>')
+    this.log('✅ 已更新现有 <!-- otcc:role -->')
   }
 }

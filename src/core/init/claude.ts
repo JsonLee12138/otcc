@@ -4,9 +4,9 @@ import { fileURLToPath } from 'node:url'
 
 export type InitAction = 'created' | 'inserted' | 'updated'
 
-const OTCC_ROLE_START = '<otcc-role>'
-const OTCC_ROLE_END = '</otcc-role>'
-const BROKEN_BLOCK_ERROR = '检测到损坏的 <otcc-role> block'
+const OTCC_ROLE_START = '<!-- otcc:role -->'
+const OTCC_ROLE_END = '<!-- otcc:role-end -->'
+const BROKEN_BLOCK_ERROR = '检测到损坏的 <!-- otcc:role --> block'
 
 export function buildOtccRoleBlock(template: string): string {
   const normalizedTemplate = template.replace(/\s+$/u, '')
@@ -32,7 +32,8 @@ export function applyOtccRoleBlock(
   }
 
   if (hasStart && hasEnd) {
-    const roleBlockPattern = /<otcc-role>[\s\S]*?<\/otcc-role>/u
+    const roleBlockPattern
+      = /<!-- otcc:role -->[\s\S]*?<!-- otcc:role-end -->/u
 
     if (!roleBlockPattern.test(current)) {
       throw new Error(BROKEN_BLOCK_ERROR)
@@ -59,7 +60,9 @@ export async function readRolePriorityTemplate(): Promise<string> {
   return await readFile(resolveTemplatePath(), 'utf8')
 }
 
-export async function initClaudeMd(cwd: string): Promise<{ action: InitAction, filePath: string }> {
+export async function initClaudeMd(
+  cwd: string,
+): Promise<{ action: InitAction, filePath: string }> {
   const filePath = resolve(cwd, 'CLAUDE.md')
 
   let current: string | null = null
@@ -67,7 +70,11 @@ export async function initClaudeMd(cwd: string): Promise<{ action: InitAction, f
     current = await readFile(filePath, 'utf8')
   }
   catch (error) {
-    if (!(error instanceof Error) || !('code' in error) || error.code !== 'ENOENT') {
+    if (
+      !(error instanceof Error)
+      || !('code' in error)
+      || error.code !== 'ENOENT'
+    ) {
       throw error
     }
   }
