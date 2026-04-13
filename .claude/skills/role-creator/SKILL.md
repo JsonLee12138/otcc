@@ -28,26 +28,28 @@ Role Creator 用于创建和管理 AI 角色定义。每个角色是一个独立
 
 AI 自动生成以下字段（不主动询问用户）：
 
-| 字段 | 说明 |
-|------|------|
-| description | 角色描述 |
-| prompt | 系统提示词 |
-| inScope | 职责范围内的工作（逗号分隔） |
-| outOfScope | 职责范围外的工作（逗号分隔） |
+| 字段        | 说明                         |
+| ----------- | ---------------------------- |
+| description | 角色描述                     |
+| prompt      | 系统提示词                   |
+| inScope     | 职责范围内的工作（逗号分隔） |
+| outOfScope  | 职责范围外的工作（逗号分隔） |
 
 **提交流审批**：
+
 1. AI 自动生成上述字段
 2. 展示给用户审批
 3. **用户拒绝或 AI 置信度低** → 调用 `/brainstorming` 技能进行结构化细化
 4. 审批通过后进入 Step 3
 
 **Brainstorming 触发条件**：
+
 - 用户拒绝 AI 生成的字段
 - AI 置信度低（范围模糊、边界冲突、目标不明确）
 
 #### Step 3: 选择 Skills
 
-1. **AI 推荐**：`find-skills` 查询相关技能作为推荐候选
+1. **AI 推荐**：`otcc:find-skills` 查询相关技能作为推荐候选
 2. 展示推荐列表，用户选择
 3. 询问手动添加额外技能
 4. **技能标识符优先级**：
@@ -56,7 +58,7 @@ AI 自动生成以下字段（不主动询问用户）：
 5. 合并、去重后确认最终技能列表
 6. 技能可为空 → 持久化为 `skills: []`
 
-**回退逻辑**：`find-skills` 不可用时，直接询问手动添加。
+**回退逻辑**：`otcc:find-skills` 不可用时，直接询问手动添加。
 
 #### Step 4: 执行 CLI
 
@@ -70,69 +72,6 @@ AI 自动生成以下字段（不主动询问用户）：
 
 ---
 
-## CLI 命令
+## 参考文档
 
-所有命令使用 `npx otcc` 前缀：
-
-### otcc role create
-
-创建新角色：
-
-```bash
-npx otcc role create --name "前端架构师" --file-name "frontend-architect" --description "负责前端技术选型"
-npx otcc role create --interactive    # 交互式创建（引导式流程）
-```
-
-**参数**：
-
-| 参数 | 说明 |
-|------|------|
-| `--name`, `-n` | 角色名称 |
-| `--file-name` | 文件名 (kebab-case) |
-| `--description`, `-d` | 角色描述 |
-| `--prompt`, `-p` | 系统提示词 |
-| `--in-scope`, `-i` | 职责范围内的工作（逗号分隔） |
-| `--out-of-scope`, `-o` | 职责范围外的工作（逗号分隔） |
-| `--skills`, `-s` | 关联的 skills（逗号分隔，格式：`owner/repo@suffix`） |
-| `--interactive`, `-I` | 交互式创建模式 |
-| `--global`, `-g` | 保存到全局目录 |
-
-### otcc role list
-
-列出所有角色：
-
-```bash
-npx otcc role list [--local] [--global]
-```
-
-### otcc role show
-
-查看角色详情：
-
-```bash
-npx otcc role show <fileName>
-```
-
-### otcc role delete
-
-删除角色：
-
-```bash
-npx otcc role delete <fileName> [--local] [--global]
-```
-
-### otcc role validate
-
-验证角色文件：
-
-```bash
-npx otcc role validate <fileName>
-```
-
-### otcc role import
-
-从全局模板导入角色到本地：
-
-```bash
-npx otcc role import <fileName>
-```
+- CLI 命令参数详情：See [cli-commands.md](references/cli-commands.md)
