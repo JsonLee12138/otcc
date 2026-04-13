@@ -18,40 +18,37 @@ Role Executor 是 OTCC 项目的核心执行引擎。它在处理任何工作请
 
 ### Step 1: 角色发现
 
-扫描所有可用角色：
+使用 Claude Code 工具扫描所有可用角色：
 
-- **本地角色**: `.otcc/roles/*.json`
-- **全局角色**: `~/.claude/plugins/marketplaces/.otcc/roles/*.json`
-
-读取每个角色的 `name`、`description`、`inScope`、`outOfScope` 字段。
+1. `Glob({ pattern: ".otcc/roles/*.json" })` — 扫描本地项目角色
+2. `Glob({ pattern: "~/.claude/plugins/marketplaces/.otcc/roles/*.json" })` — 扫描全局角色
+3. `Read` 每个角色文件，提取 `name`、`description`、`inScope`、`outOfScope` 字段
 
 ### Step 2: 角色匹配
 
 基于用户请求的关键词和意图，选择最匹配的角色：
 
-1. 提取用户请求中的关键动词和名词
-2. 与每个角色的 `inScope`/`outOfScope` 进行语义匹配
-3. 计算匹配分数，选择得分最高的角色
-4. 若无匹配度足够的角色，返回 `none` 并使用默认方式处理
+1. 阅读用户请求，理解其核心意图和目标
+2. 与每个角色的 `inScope` 进行语义匹配，判断职责是否覆盖请求
+3. 检查 `outOfScope`，若请求明确落在排除范围则降低匹配度
+4. 选择匹配度最高的角色；若无足够匹配的角色，返回 `none` 并使用默认方式处理
 
 **匹配规则**：
 
-- 精确关键词匹配：`inScope` 中的词项完全包含在请求中
-- 语义相似匹配：请求意图与角色职责描述相似
-- 排除匹配：`outOfScope` 中包含的词项会降低匹配度
+- 语义优先：不依赖关键词精确匹配，理解请求与角色职责的语义关系
+- outOfScope 排除：请求核心落在 outOfScope 时，即使 inScope 有部分匹配也应排除
+- 用户优先：若用户明确指定角色名称，直接加载该角色，跳过匹配流程
 
 ### Step 3: Skills 检查与安装
 
 读取选中角色的 `skills` 字段，检查每个 skill 是否已安装：
 
-```bash
-# 检查 skill 是否已安装
-ls .claude/skills/<skill-name> 2>/dev/null || ls ~/.claude/skills/<skill-name> 2>/dev/null
-```
+1. `Glob({ pattern: ".claude/skills/<skill-name>" })` — 检查本地项目 skills
+2. `Glob({ pattern: "~/.claude/skills/<skill-name>" })` — 检查全局 skills
 
 **缺失时安装**：
 
-- 若使用 `find-skills` agent：调用 `agent-team:find-skills` 查找并安装
+- 使用 `otcc:find-skills` 查找并安装缺失的 skill
 - 若为本地 skill：使用 `npx otcc skill add <skill-name>`
 - 远程 skill：使用完整标识符 `owner/repo@suffix`
 
@@ -59,9 +56,9 @@ ls .claude/skills/<skill-name> 2>/dev/null || ls ~/.claude/skills/<skill-name> 2
 
 加载选中角色的完整定义：
 
-1. 读取角色 JSON 文件
-2. 加载角色的 `prompt` 作为系统上下文补充
-3. 加载角色的 `inScope`/`outOfScope` 明确职责边界
+1. `Read` 角色 JSON 文件获取完整内容
+2. 将角色的 `prompt` 内容纳入当前对话上下文，指导后续行为
+3. 将角色的 `inScope`/`outOfScope` 纳入上下文，明确职责边界
 
 ### Step 5: 任务执行
 
