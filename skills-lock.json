@@ -6,6 +6,11 @@
       "sourceType": "github",
       "computedHash": "cfe509f86b008961647d6ce61c3cc3b595a77448cf5647e3177796cc91a34d52"
     },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "computedHash": "9e1c8b3103f92fa8092568a44fe64858de7c5c9dc65ce4bea8f168080e889cfd"
+    },
     "oclif-patterns": {
       "source": "vanman2024/cli-builder",
       "sourceType": "github",

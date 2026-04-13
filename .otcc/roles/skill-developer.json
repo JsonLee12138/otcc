@@ -20,12 +20,12 @@
   ],
   "skills": [
     {
-      "path": "prompt-engineering-patterns",
+      "path": "pwshobson/agents@prompt-engineering-patterns",
       "name": "prompt-engineering-patterns",
       "description": "Use when writing or refining prompts, system instructions, templates, and structured prompt workflows for the skill."
     },
     {
-      "path": "skill-creator",
+      "path": "anthropics/skills@skill-creator",
       "name": "skill-creator",
       "description": "Use when creating, updating, structuring, or validating Claude Code skills and their bundled resources."
     }

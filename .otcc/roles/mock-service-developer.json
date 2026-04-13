@@ -28,22 +28,22 @@
     {
       "path": "pluginagentmarketplace/custom-plugin-nodejs@express-rest-api",
       "name": "express-rest-api",
-      "description": "本地技能，用于定义和实现 Express REST API mock 接口。"
+      "description": "用于定义和实现 Express REST API mock 接口。"
     },
     {
       "path": "wshobson/agents@nodejs-backend-patterns",
       "name": "nodejs-backend-patterns",
-      "description": "网络技能，安装量较高，适合 Node.js 后端结构、接口实现与工程模式参考。"
+      "description": "适合 Node.js 后端结构、接口实现与工程模式参考。"
     },
     {
-      "path": "zod",
+      "path": "pproenca/dot-skills@zod",
       "name": "zod",
-      "description": "本地技能，用于定义和校验请求、响应、文件存储与派生数据结构。"
+      "description": "用于定义和校验请求、响应、文件存储与派生数据结构。Schema validation best practices for TypeScript with 43 prioritized rules across type safety, parsing, and error handling."
     },
     {
-      "path": "design-patterns-principles",
+      "path": "jsonlee12138/prompts/design-patterns-principles",
       "name": "design-patterns-principles",
-      "description": "本地技能，用于控制 Express mock 服务的结构设计、职责边界与可维护性。"
+      "description": "Provide concise, consistent explanations of patterns and principles using local reference documents."
     }
   ]
 }

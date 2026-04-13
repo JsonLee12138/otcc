@@ -1,0 +1,15 @@
+{
+  "name": "otcc-marketplace",
+  "owner": {
+    "name": "jsonlee"
+  },
+  "plugins": [
+    {
+      "name": "otcc",
+      "source": {
+        "source": "github",
+        "repo": "JsonLee12138/otcc"
+      }
+    }
+  ]
+}

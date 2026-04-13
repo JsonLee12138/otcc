@@ -26,23 +26,23 @@
   ],
   "skills": [
     {
-      "path": "design-patterns-principles",
+      "path": "jsonlee12138/prompts@design-patterns-principles",
       "name": "design-patterns-principles",
       "description": "用于代码结构、架构方案、模块边界和设计原则分析。"
     },
     {
-      "path": "prompt-engineering-patterns",
+      "path": "wshobson/agents@prompt-engineering-patterns",
       "name": "prompt-engineering-patterns",
       "description": "用于提示词设计、评审和优化，提升研究与设计输出质量。"
     },
     {
-      "path": "deep-research",
+      "path": "199-biotechnologies/claude-deep-research-skill@deep-research",
       "name": "deep-research",
       "description": "用于需要多来源调研、对比分析和引用支撑的技术研究任务。"
     },
     {
-      "path": "agent-team:brainstorming",
-      "name": "agent-team:brainstorming",
+      "path": "obra/superpowers@brainstorming",
+      "name": "brainstorming",
       "description": "用于需求模糊、需要结构化澄清、方案共创和边界收敛的前置讨论。"
     }
   ]
