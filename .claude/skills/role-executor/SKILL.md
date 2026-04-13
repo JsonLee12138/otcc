@@ -77,7 +77,13 @@ Role Executor 是 OTCC 项目的核心执行引擎。它在处理任何工作请
   "prompt": "系统提示词补充",
   "inScope": ["职责范围1", "职责范围2"],
   "outOfScope": ["职责范围外1", "职责范围外2"],
-  "skills": ["skill-name-1", "skill-name-2"]
+  "skills": [
+    {
+      "path": "owner/repo@suffix",
+      "name": "skill-name",
+      "description": "skill 描述"
+    }
+  ]
 }
 ```
 
