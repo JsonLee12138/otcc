@@ -1,106 +1,58 @@
 # Role Matcher Reference
 
-## 匹配算法
+## 匹配原则
 
-### 1. 关键词提取
+### 语义匹配
 
-从用户请求中提取关键信息：
+不依赖关键词精确匹配。LLM 应理解用户请求的核心意图，判断该意图是否属于角色 `inScope` 覆盖的职责范围。
 
-```typescript
-interface TaskKeywords {
-  verbs: string[]; // 动词：build, create, fix, design...
-  nouns: string[]; // 名词：cli, api, frontend, database...
-  domain: string[]; // 领域：payment, auth, logging...
-}
-```
+### outOfScope 排除
 
-### 2. 评分计算
+若用户请求的核心目标明确落在角色的 `outOfScope` 范围内，即使 `inScope` 有部分相关，也应排除该角色。
 
-```
-matchScore = (inScopeMatches * 10) - (outOfScopeMatches * 15) + semanticBonus
-```
+### 优先级规则
 
-| 条件                        | 分数 |
-| --------------------------- | ---- |
-| 精确关键词匹配 `inScope`    | +10  |
-| 语义相似 `inScope`          | +5   |
-| 精确关键词匹配 `outOfScope` | -15  |
-| 语义相似 `outOfScope`       | -8   |
+当多个角色匹配度相近时：
 
-### 3. 阈值规则
-
-- `score >= 15`：强匹配，直接选用
-- `score 8-14`：中匹配，考虑选用
-- `score 1-7`：弱匹配，可能选用但需确认
-- `score <= 0`：不匹配，尝试下一个角色
+1. 本地项目角色优先于全局角色
+2. 用户明确指定的角色优先于自动匹配
 
 ## 匹配示例
 
-### 示例 1
+### 示例 1：明确匹配
 
 **用户请求**："帮我创建一个新的 CLI 命令"
 
-**分析**：
+**分析**：请求核心是 CLI 命令创建，属于 `cli-developer` 角色的 inScope 范围。
 
-- verbs: `create`
-- nouns: `cli`, `command`
-- domain: `cli`
+**匹配结果**：`cli-developer`
 
-**匹配结果**：`cli-developer` (score: 25)
-
-- `inScope` 匹配：`CLI command design and implementation` +10
-- `inScope` 匹配：`Command arguments and flags` +5
-- `outOfScope` 匹配：无
-
-### 示例 2
+### 示例 2：无匹配
 
 **用户请求**："设计一个用户认证系统"
 
-**分析**：
+**分析**：认证系统设计不属于任何现有角色的 inScope 范围。
 
-- verbs: `design`
-- nouns: `auth`, `system`
-- domain: `auth`
+**匹配结果**：`none`，使用默认方式处理，告知用户可用角色列表。
 
-**匹配结果**：`none` (所有角色 score <= 0)
+### 示例 3：outOfScope 排除
 
-- `cli-developer`：`auth` 不在 inScope
-- `skill-developer`：`auth system` 不在 inScope
+**用户请求**："重构整个前端架构"
 
-## 角色列表
+**分析**：即使 `cli-developer` 角色可能涉及部分前端代码，但"前端架构重构"明确在其 outOfScope 中。
 
-当前可用角色：
-
-| 角色名                        | 文件名                          | 主要职责               |
-| ----------------------------- | ------------------------------- | ---------------------- |
-| CLI Developer                 | `cli-developer`                 | CLI 命令设计与实现     |
-| Skill Developer               | `skill-developer`               | Claude Code skill 开发 |
-| Tech Research Design Engineer | `tech-research-design-engineer` | 技术调研与设计         |
-| Mock Service Developer        | `mock-service-developer`        | Mock 服务开发          |
+**匹配结果**：排除 `cli-developer`，匹配 `none`。
 
 ## 特殊规则
 
-### 1. 组合任务
+### 组合任务
 
-若请求涉及多个领域：
+若请求涉及多个领域：选择能覆盖核心需求的角色，若最高匹配角色无法覆盖关键部分，提示用户。
 
-1. 分别计算每个领域的匹配度
-2. 选择得分最高的角色
-3. 若最高分角色无法覆盖关键部分，提示用户
+### 模糊请求
 
-### 2. 模糊请求
+若请求过于模糊（如"帮我做这个"）：基于当前文件上下文推断意图，若无法推断则请求用户澄清。
 
-若请求过于模糊（如"帮我做这个"）：
+### 明确指定
 
-1. 基于当前文件上下文推断意图
-2. 若无法推断，请求用户澄清
-
-### 3. 明确指定
-
-若用户明确指定角色：
-
-```
-使用 cli-developer 角色
-```
-
-→ 直接加载指定角色，跳过匹配流程
+若用户明确指定角色名称，直接加载该角色，跳过匹配流程。
