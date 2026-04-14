@@ -1,14 +1,17 @@
 {
-  "name": "otcc-marketplace",
+  "name": "otcc",
+  "version": "0.1.0",
   "owner": {
-    "name": "jsonlee"
+    "name": "JsonLee12138",
+    "email": "lijunsong2@gmail.com"
   },
   "plugins": [
     {
       "name": "otcc",
-      "source": {
-        "source": "github",
-        "repo": "JsonLee12138/otcc"
+      "source": "./",
+      "author": {
+        "name": "JsonLee12138",
+        "email": "lijunsong2@gmail.com"
       }
     }
   ]
