@@ -32,14 +32,19 @@ jobs:
           esac
           bun run tag -- --check "$RELEASE_TAG"
 
+      - name: Configure git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Type check
         run: bun run typecheck
 
-      - name: Run tests
-        run: bun test
-
       - name: Build package
         run: bun run build
+
+      - name: Run tests
+        run: bun run test
 
       - name: Publish to npm
         run: npm publish --provenance --access public
