@@ -1,6 +1,6 @@
 {
   "name": "otcc",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OTCC Claude plugin",
   "skills": "./.claude/skills/"
 }
