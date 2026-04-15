@@ -72,7 +72,7 @@
 **缺失时安装：**
 
 - 使用 `otcc:find-skills` 查找并安装缺失的 skill
-- 若为本地 skill：使用 `npx otcc skill add <skill-name>`
+- 若为本地 skill：使用 `npx @jsonlee_12138/otcc skill add <skill-name>`
 - 远程 skill：使用完整标识符 `owner/repo@suffix`
 ```
 

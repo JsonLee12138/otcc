@@ -1,14 +1,14 @@
 ## CLI 命令
 
-所有命令使用 `npx otcc` 前缀：
+所有命令使用 `npx @jsonlee_12138/otcc` 前缀：
 
 ### otcc role create
 
 创建新角色：
 
 ```bash
-npx otcc role create --name "前端架构师" --file-name "frontend-architect" --description "负责前端技术选型"
-npx otcc role create --interactive    # 交互式创建（引导式流程）
+npx @jsonlee_12138/otcc role create --name "前端架构师" --file-name "frontend-architect" --description "负责前端技术选型"
+npx @jsonlee_12138/otcc role create --interactive    # 交互式创建（引导式流程）
 ```
 
 **参数**：
@@ -30,7 +30,7 @@ npx otcc role create --interactive    # 交互式创建（引导式流程）
 列出所有角色：
 
 ```bash
-npx otcc role list [--local] [--global]
+npx @jsonlee_12138/otcc role list [--local] [--global]
 ```
 
 ### otcc role show
@@ -38,7 +38,7 @@ npx otcc role list [--local] [--global]
 查看角色详情：
 
 ```bash
-npx otcc role show <fileName>
+npx @jsonlee_12138/otcc role show <fileName>
 ```
 
 ### otcc role delete
@@ -46,7 +46,7 @@ npx otcc role show <fileName>
 删除角色：
 
 ```bash
-npx otcc role delete <fileName> [--local] [--global]
+npx @jsonlee_12138/otcc role delete <fileName> [--local] [--global]
 ```
 
 ### otcc role validate
@@ -54,7 +54,7 @@ npx otcc role delete <fileName> [--local] [--global]
 验证角色文件：
 
 ```bash
-npx otcc role validate <fileName>
+npx @jsonlee_12138/otcc role validate <fileName>
 ```
 
 ### otcc role import
@@ -62,5 +62,5 @@ npx otcc role validate <fileName>
 从全局模板导入角色到本地：
 
 ```bash
-npx otcc role import <fileName>
+npx @jsonlee_12138/otcc role import <fileName>
 ```

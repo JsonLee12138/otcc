@@ -62,7 +62,7 @@ AI 自动生成以下字段（不主动询问用户）：
 
 #### Step 4: 执行 CLI
 
-使用 `npx otcc role create` 命令创建角色（见下方 CLI 命令参考）
+使用 `npx @jsonlee_12138/otcc role create` 命令创建角色（见下方 CLI 命令参考）
 
 #### Step 5: 验证输出
 
