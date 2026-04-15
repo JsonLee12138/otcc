@@ -132,6 +132,10 @@ export async function syncReleaseTag(
   const tagVersion = parseReleaseTag(tag)
   ensureGitTagMissing(cwd, tag)
   await syncVersionFiles(cwd, tagVersion)
+  execSync(`git add ${VERSION_FILES.join(' ')}`, { cwd })
+  execSync(`git commit -m "chore(release): bump version to ${tagVersion}"`, {
+    cwd,
+  })
   createGitTag(cwd, tag)
   return tagVersion
 }
