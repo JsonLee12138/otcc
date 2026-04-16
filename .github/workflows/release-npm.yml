@@ -30,9 +30,10 @@ jobs:
 
       - name: Upgrade npm for OIDC support
         run: |
-          npm install -g npm@latest || {
+          npm install -g npm@latest 2>/dev/null || {
+            TARBALL=$(curl -s https://registry.npmjs.org/npm/latest | node -e "process.stdout.write(JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')).dist.tarball)")
             NPM_GLOBAL=$(npm prefix -g)
-            curl -sL https://registry.npmjs.org/npm/-/npm-latest.tgz -o /tmp/npm.tgz
+            curl -sL "$TARBALL" -o /tmp/npm.tgz
             rm -rf "${NPM_GLOBAL}/lib/node_modules/npm"
             tar -xzf /tmp/npm.tgz -C "${NPM_GLOBAL}/lib/node_modules"
             mv "${NPM_GLOBAL}/lib/node_modules/package" "${NPM_GLOBAL}/lib/node_modules/npm"
