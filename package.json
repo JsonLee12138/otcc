@@ -3,6 +3,10 @@
   "type": "module",
   "version": "0.1.2",
   "description": "Claude Plugin - Prompt Engineering & CLI Tool",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JsonLee12138/otcc"
+  },
   "bin": {
     "otcc": "./dist/index.mjs"
   },
