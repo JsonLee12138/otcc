@@ -28,6 +28,17 @@ jobs:
           node-version: "22"
           registry-url: https://registry.npmjs.org/
 
+      - name: Upgrade npm for OIDC support
+        run: |
+          npm install -g npm@latest || {
+            NPM_GLOBAL=$(npm prefix -g)
+            curl -sL https://registry.npmjs.org/npm/-/npm-latest.tgz -o /tmp/npm.tgz
+            rm -rf "${NPM_GLOBAL}/lib/node_modules/npm"
+            tar -xzf /tmp/npm.tgz -C "${NPM_GLOBAL}/lib/node_modules"
+            mv "${NPM_GLOBAL}/lib/node_modules/package" "${NPM_GLOBAL}/lib/node_modules/npm"
+          }
+          npm --version
+
       - name: Verify release versions
         env:
           RELEASE_TAG: ${{ github.ref_name }}
@@ -55,4 +66,4 @@ jobs:
       - name: Publish to npm
         run: npm publish --provenance --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ""
