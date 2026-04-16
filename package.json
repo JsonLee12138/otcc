@@ -1,7 +1,7 @@
 {
   "name": "@jsonlee_12138/otcc",
   "type": "module",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Claude Plugin - Prompt Engineering & CLI Tool",
   "repository": {
     "type": "git",
@@ -33,8 +33,7 @@
     "lint:fix": "eslint . --fix",
     "prepare": "husky",
     "test": "bun test",
-    "tag": "bun run scripts/tag.ts",
-    "release": "bun run scripts/release.ts"
+    "tag": "bun run scripts/tag.ts"
   },
   "config": {
     "commitizen": {
