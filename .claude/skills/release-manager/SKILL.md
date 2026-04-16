@@ -82,27 +82,21 @@ git push origin main --follow-tags
 
 When the user wants to rollback a version (e.g., "rollback v0.1.3", "redo this version"):
 
-1. **Confirm the target version** — read current version from `package.json`, confirm which version to rollback to.
+1. **Confirm the target version** — confirm which version tag to delete and redo.
 
-2. **Delete local tag and commit**:
+2. **Delete local tag**:
 
 ```bash
 git tag -d vX.Y.Z
 ```
 
-If the release commit is the most recent one:
+3. **Delete remote tag** (if already pushed):
 
 ```bash
-git reset --soft HEAD~1
+git push origin :refs/tags/vX.Y.Z
 ```
 
-3. **Reset version files** — re-run the version script with the target version to set all files back:
-
-```bash
-bun run <skill-path>/scripts/version.ts vX.Y.Z
-```
-
-4. **Re-commit and re-tag** — follow the normal release workflow from step 3.
+4. **Re-run release workflow** — start from Step 1 to bump version and create a new tag.
 
 ## Version Script
 
